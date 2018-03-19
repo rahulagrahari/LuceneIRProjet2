@@ -1,15 +1,31 @@
 package com.groupIR.IR2.test;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import com.groupIR.IR2.indexer.IndexFile;
+
 
 import com.groupIR.IR2.parser.*;
 public class test {
 	
-	public static void main(String args[]) {
-		File f = new File("/home/rahul/Intelligent System/Information Retrieval/Assignment Two/Assignment Two/latimes/");
-		System.out.println(f.listFiles()[0].getName());
+	public static void main(String args[]) throws SAXException, ParserConfigurationException {
+	      
+		IndexFile.callIndex("outputFolder/", "INDEX_PATH");
+		
+//		String s1= "This is me & you who are the best friends forever";
+//		if(s1.contains("&")) {
+//			String s2 = s1.replace("&", "&amp;");
+//			System.out.println(s2);
+		}
+		
 	}
 
 	
 	
 	
-}
+

@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 
 public class datasetParser {
 
-	public static void main(String args[]) throws SAXException, IOException, ParserConfigurationException {
+	public static void LATimeParser() throws SAXException, IOException, ParserConfigurationException {
 
 		PrintWriter writer = null;
 		if (Files.notExists(Paths.get("outputFolder"))){
@@ -52,7 +52,7 @@ public class datasetParser {
 			Element rootElement = doc.getDocumentElement();
 			System.out.println("Parent Node: " + rootElement.getNodeName());
 			NodeList nodes = doc.getElementsByTagName("DOC");
-			for (int i = 0; i < 1; i++) {
+			for (int i = 0; i < nodes.getLength(); i++) {
 				File file = new File("outputFolder/" + k+1 + "-" +i+1);
 				writer = new PrintWriter(new FileWriter(file));
 				writer.println("<DOCUMENT>");
@@ -151,13 +151,81 @@ public class datasetParser {
 		sb.append("<LACONTENT>");
 		String line = br.readLine();
 		while (line != null) {
-			sb.append(line);
+			if (line.contains("&")) {
+				String s = line.replace("&", "&amp;");
+				sb.append(s);
+			}
+			else {
+			sb.append(line);}
 			line = br.readLine();
 		}
 		sb.append("</LACONTENT>");
 		br.close();
 		return sb.toString();
 
+	}
+	
+	public static void queryparser() throws IOException, ParserConfigurationException, SAXException {
+		String path = "query/topics.txt";
+		File file = new File(path);
+		StringBuilder sb = new StringBuilder();
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String line = br.readLine();
+		while (line != null) {
+			sb.append(line);
+			line = br.readLine();
+		}
+		
+		br.close();
+		String xml = sb.toString();
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse(new InputSource(new StringReader(xml)));
+		Element rootElement = doc.getDocumentElement();
+		System.out.println("Parent Node: " + rootElement.getNodeName());
+		NodeList nodes = doc.getElementsByTagName("top");
+//		
+//		** this is to be replaced by one if we want to loop to all the top element**
+//		nodes.getLength()
+//		
+		for (int i = 0; i < 1; i++) {
+			Node node = nodes.item(i);
+			Element ele = (Element) node;
+			if (ele.getElementsByTagName("num").item(0) != null) {
+				
+				System.out.println(i+": --"+ele.getElementsByTagName("num").item(0).getTextContent());
+				System.out.println("------------------");
+				
+			}
+			
+			if (ele.getElementsByTagName("title").item(0) != null) {
+				
+				System.out.println(i+": --"+ele.getElementsByTagName("title").item(0).getTextContent());
+				System.out.println("------------------");
+				
+			}
+
+			if (ele.getElementsByTagName("desc").item(0) != null) {
+	
+				System.out.println(i+": --"+ele.getElementsByTagName("desc").item(0).getTextContent());
+				System.out.println("------------------");
+	
+			}
+			
+			if (ele.getElementsByTagName("narr").item(0) != null) {
+				
+				System.out.println(i+": --"+ele.getElementsByTagName("narr").item(0).getTextContent());
+				System.out.println("------------------");
+	
+			}
+		}
+		
+	}
+	
+	public static void main(String args[]) throws IOException, ParserConfigurationException, SAXException {
+		LATimeParser();
+		
 	}
 
 }
