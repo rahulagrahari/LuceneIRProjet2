@@ -50,7 +50,7 @@ public class IndexFile {
 	 * @throws SAXException */
 	public static void callIndex(String docsPath, String indexPath) throws SAXException, ParserConfigurationException {
 		
-		boolean create = true;
+		boolean create = false;
 		
 
 		if (docsPath == null) {

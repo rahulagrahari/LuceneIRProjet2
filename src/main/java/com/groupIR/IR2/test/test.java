@@ -15,7 +15,7 @@ public class test {
 	
 	public static void main(String args[]) throws SAXException, ParserConfigurationException {
 	      
-		IndexFile.callIndex("outputFolder/", "INDEX_PATH");
+		IndexFile.callIndex("outputFolderFT/", "INDEX_PATH");
 		
 //		String s1= "This is me & you who are the best friends forever";
 //		if(s1.contains("&")) {

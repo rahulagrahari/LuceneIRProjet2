@@ -53,7 +53,7 @@ public class datasetParser {
 			System.out.println("Parent Node: " + rootElement.getNodeName());
 			NodeList nodes = doc.getElementsByTagName("DOC");
 			for (int i = 0; i < nodes.getLength(); i++) {
-				File file = new File("outputFolder/" + k+1 + "-" +i+1);
+				File file = new File("outputFolder/" +""+ k+1 + "-" +i+1);
 				writer = new PrintWriter(new FileWriter(file));
 				writer.println("<DOCUMENT>");
 				Node node = nodes.item(i);

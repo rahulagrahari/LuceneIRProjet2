@@ -24,7 +24,7 @@ public class xmlParser {
 	
 	public static Map parse(String filename, String[] tagnames) throws SAXException, IOException, ParserConfigurationException {
 		
-		File folder = new File("outputFolder/");
+		File folder = new File("outputFolderFT/");
 		File[] listOfFiles = folder.listFiles();
 		Document doc = null;
 		String eleContent = null;
@@ -35,7 +35,7 @@ public class xmlParser {
 				System.out.println("----------------------------------------------------");
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = factory.newDocumentBuilder();
-				doc = builder.parse(new InputSource("outputFolder/" + fileName.getName()));
+				doc = builder.parse(new InputSource("outputFolderFT/" + fileName.getName()));
 				NodeList nodes = doc.getElementsByTagName("DOCUMENT");
 				Node node = nodes.item(0);
 				Element ele = (Element) node;
