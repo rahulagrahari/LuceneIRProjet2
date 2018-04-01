@@ -16,8 +16,11 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import com.groupIR.IR2.parser.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -75,14 +78,10 @@ public class IndexFile {
 			IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 			iwc.setSimilarity(new BM25Similarity());
 			
-			if (create) {
-				// Create a new index in the directory, removing any
-				// previously indexed documents:
-				iwc.setOpenMode(OpenMode.CREATE);
-			} else {
+		
 				// Add new documents to an existing index:
 				iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			}
+		
 
 			// Optional: for better indexing performance, if you
 			// are indexing many documents, increase the RAM
@@ -112,31 +111,31 @@ public class IndexFile {
 	}
 
 	static void indexDocument(IndexWriter writer, Path file) throws IOException, SAXException, ParserConfigurationException {
-
+		
+		System.out.println("Indexing....");
 		File folder = new File(file.toString() + "/");
 		File[] listOfFiles = folder.listFiles();
-		String[] fieldName = { "TITLE", "AUTHOR", "BODY", "DATE" };
+//		String[] fieldName = { "TITLE", "BODY", "DATE" };
 		int m = 1;
-		Document doc = new Document();
+		int k=1;
+		List<Document> docs = new ArrayList();
 		for (File fileName : listOfFiles) {			
-			Map tagContent = xmlParser.parse(fileName.getName(), fieldName);
+			Document doc = new Document();
+			k++;
+			Scanner s = new Scanner(new File(file.toString()+"/"+fileName.getName()));
+			String s1 = s.useDelimiter("\\Z").next();
+//			Map tagContent  = xmlParser.parse(fileName.getName(), fieldName, file);
 			doc.add(new StringField("id", fileName.getName(), Field.Store.YES));
-			doc.add(new TextField("TITLE", tagContent.get("TITLE").toString(), Field.Store.YES));
-			doc.add(new TextField("AUTHOR", tagContent.get("AUTHOR").toString(), Field.Store.YES));
-			doc.add(new TextField("BODY", tagContent.get("BODY").toString(), Field.Store.YES));
-			doc.add(new TextField("DATE", tagContent.get("DATE").toString(), Field.Store.YES));
-			 if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
-		        // New index, so we just add the document (no old document can be there):
-		        System.out.println("adding " + fileName.getName());
-		        writer.addDocument(doc);
-		      } else {
-		        // Existing index (an old copy of this document may have been indexed) so 
-		        // we use updateDocument instead to replace the old one matching the exact 
-		        // path, if present:
-		        System.out.println("updating " + fileName.getName());
-		        writer.updateDocument(new Term("path", fileName.getName().toString()), doc);
-		      }
+			doc.add(new TextField("content", s1, Field.Store.YES));
+//			doc.add(new TextField("TITLE", tagContent.get("TITLE").toString(), Field.Store.YES));
+//			doc.add(new TextField("BODY", tagContent.get("BODY").toString(), Field.Store.YES));
+//			doc.add(new TextField("DATE", tagContent.get("DATE").toString(), Field.Store.YES));
+			docs.add(doc);
 		}
+		
+		 
+		        writer.addDocuments(docs);
+		     System.out.println("indexing done with "+ k);
 		
 
 	}
